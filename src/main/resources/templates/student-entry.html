@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Entry | ExamEase</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        body {
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .entry-section {
+            min-height: 82vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 45px 15px;
+        }
+
+        .entry-card {
+            width: 100%;
+            max-width: 470px;
+            padding: 38px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .entry-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            border-radius: 16px;
+            font-size: 27px;
+        }
+
+        .entry-card .form-label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .entry-card .form-control {
+            background: var(--background);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .entry-card .form-control:focus {
+            background: var(--surface);
+            color: var(--text);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(165, 166, 246, 0.2);
+        }
+
+        .entry-card .form-control::placeholder {
+            color: var(--muted);
+        }
+
+        .entry-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px;
+        }
+
+        .entry-button:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .entry-description,
+        .entry-footer {
+            color: var(--muted);
+        }
+
+        .brand-dot {
+            color: var(--primary);
+        }
+
+        .navbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar-brand {
+            color: var(--text);
+            font-weight: 750;
+            font-size: 23px;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            color: var(--text);
+        }
+
+        .theme-toggle {
+            background: var(--surface-secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        @media (max-width: 576px) {
+            .entry-card {
+                padding: 27px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar sticky-top py-3">
+    <div class="container">
+
+        <a class="navbar-brand" href="/">
+            ExamEase<span class="brand-dot">.</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-3">
+            <a th:href="@{/student-entry}"
+               class="nav-link">
+                Student Entry
+            </a>
+
+            <button class="theme-toggle"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Toggle dark mode">
+                <span id="themeIcon">☾</span>
+            </button>
+        </div>
+
+    </div>
+</nav>
+
+<!-- Student Entry Form -->
+<main class="entry-section">
+
+    <div class="entry-card">
+
+        <div class="entry-icon">👨‍🎓</div>
+
+        <h2 class="text-center fw-bold mb-2">
+            Student Entry
+        </h2>
+
+        <p class="text-center entry-description mb-4">
+            Enter your details to continue to examinations.
+        </p>
+
+        <div class="alert alert-danger"
+             th:if="${error}"
+             th:text="${error}">
+        </div>
+
+        <form th:action="@{/student-entry}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Student Name</label>
+
+                <input type="text"
+                       name="name"
+                       class="form-control"
+                       value="Vivek Rawal"
+                       placeholder="Enter your full name"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Roll Number</label>
+
+                <input type="text"
+                       name="rollNumber"
+                       class="form-control"
+                       value="241205"
+                       placeholder="Enter your roll number"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="btn entry-button w-100">
+                Continue to Exams →
+            </button>
+
+        </form>
+
+        <p class="text-center entry-footer mt-4 mb-0 small">
+            ExamEase · Online Examination and Quiz System
+        </p>
+
+    </div>
+
+</main>
+
+<script>
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        document.body.setAttribute("data-theme", theme);
+        themeIcon.textContent = theme === "dark" ? "☀" : "☾";
+    }
+
+    const savedTheme = localStorage.getItem("theme") || "light";
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener("click", function () {
+        const currentTheme =
+            document.documentElement.getAttribute("data-theme");
+
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+        localStorage.setItem("theme", newTheme);
+        applyTheme(newTheme);
+    });
+</script>
+
+</body>
+</html>
